@@ -1,0 +1,604 @@
+/* ================================================================
+   LIFE DASHBOARD — style.css
+   This is the only CSS file for the entire project.
+
+   TABLE OF CONTENTS:
+   1. CSS Custom Properties (variables for colors/spacing)
+   2. Reset & Base Styles
+   3. Layout (header, main container, grid)
+   4. Card Component
+   5. Buttons (base styles shared across sections)
+   ================================================================ */
+
+
+/* ----------------------------------------------------------------
+   1. CSS CUSTOM PROPERTIES
+   Variables let us change the whole theme in one place.
+   The :root selector applies them globally.
+   In Stage 6 we will add a .dark-mode override block here.
+---------------------------------------------------------------- */
+:root {
+  /* Colors — Light Mode (default) */
+  --color-bg: #f0f2f5;
+  --color-surface: #ffffff;
+  --color-primary: #4f46e5;       /* indigo — main accent */
+  --color-primary-hover: #4338ca;
+  --color-text: #1f2937;
+  --color-text-muted: #6b7280;
+  --color-border: #e5e7eb;
+
+  /* Spacing */
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+
+  /* Misc */
+  --radius: 12px;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --transition: 0.25s ease;
+}
+
+
+/* ----------------------------------------------------------------
+   STAGE 6 — DARK MODE OVERRIDES
+   When JavaScript adds .dark-mode to <body>, these variables
+   replace the :root defaults above. Every element that uses
+   var(--color-*) automatically repaints — no extra CSS needed.
+---------------------------------------------------------------- */
+body.dark-mode {
+  --color-bg:      #111827;   /* very dark blue-grey */
+  --color-surface: #1f2937;   /* slightly lighter card background */
+  --color-text:    #f9fafb;   /* near-white */
+  --color-text-muted: #9ca3af;
+  --color-border:  #374151;
+  --color-primary: #818cf8;   /* lighter indigo for contrast on dark bg */
+  --color-primary-hover: #6366f1;
+}
+
+
+/* ----------------------------------------------------------------
+   2. RESET & BASE STYLES
+   Normalise browser defaults so everything looks consistent.
+---------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  transition: background-color var(--transition), color var(--transition);
+}
+
+h1, h2, h3 {
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+p {
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+
+/* ----------------------------------------------------------------
+   3. LAYOUT
+   Header stays at the top. Main is a responsive two-column grid.
+---------------------------------------------------------------- */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
+}
+
+.app-title {
+  font-size: 1.25rem;
+  color: var(--color-primary);
+}
+
+.main-container {
+  display: grid;
+  /* Two equal columns on wide screens, one column on small screens */
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+
+/* ----------------------------------------------------------------
+   4. CARD COMPONENT
+   Each section (greeting, timer, to-do, links) lives in a card.
+---------------------------------------------------------------- */
+.card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--color-border);
+  transition: background-color var(--transition), border-color var(--transition);
+}
+
+.card h2 {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+}
+
+
+/* ----------------------------------------------------------------
+   5. BUTTONS
+   Base button styles shared across all sections.
+   Each section can add its own modifier classes on top.
+---------------------------------------------------------------- */
+button {
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  transition: background-color var(--transition), color var(--transition);
+}
+
+.btn-theme {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.btn-theme:hover {
+  background-color: var(--color-border);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+}
+
+
+/* ----------------------------------------------------------------
+   STAGE 2 — GREETING SECTION
+---------------------------------------------------------------- */
+
+/* The time-based greeting: "Good morning, friend." */
+.greeting-message {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-text);        /* override the muted default from <p> */
+  margin-bottom: var(--spacing-sm);
+}
+
+/* The live clock display */
+.greeting-time {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  margin-bottom: var(--spacing-sm);
+}
+
+/* The current date */
+.greeting-date {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+}
+
+
+/* ----------------------------------------------------------------
+   STAGE 3 — TO-DO LIST
+---------------------------------------------------------------- */
+
+/* Row that holds the text input and the Add button side by side */
+.todo-input-row {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+/* The text input field */
+.todo-input {
+  flex: 1;                          /* takes all remaining width */
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: border-color var(--transition), background-color var(--transition);
+  outline: none;
+}
+
+.todo-input:focus {
+  border-color: var(--color-primary);
+}
+
+/* The <ul> that holds task items — remove default list styling */
+.todo-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+/* Each individual task row */
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  transition: background-color var(--transition);
+}
+
+/* The checkbox */
+.todo-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--color-primary);  /* colors the checkmark */
+  flex-shrink: 0;
+}
+
+/* Task text — grows to fill available space */
+.todo-text {
+  flex: 1;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  word-break: break-word;
+  transition: color var(--transition);
+}
+
+/* Completed task: grey text with a strikethrough */
+.todo-item.completed .todo-text {
+  text-decoration: line-through;
+  color: var(--color-text-muted);
+}
+
+/* Edit input — shown when user clicks Edit, hidden otherwise */
+.todo-edit-input {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1px solid var(--color-primary);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  outline: none;
+}
+
+/* Small action buttons (Edit / Save / Delete) */
+.btn-todo-action {
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.btn-edit {
+  background-color: #e0e7ff;
+  color: #3730a3;
+}
+
+.btn-edit:hover {
+  background-color: #c7d2fe;
+}
+
+.btn-save {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.btn-save:hover {
+  background-color: #a7f3d0;
+}
+
+.btn-delete {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.btn-delete:hover {
+  background-color: #fecaca;
+}
+
+/* Empty-state message */
+.todo-empty {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  padding: var(--spacing-md) 0;
+}
+
+
+/* ----------------------------------------------------------------
+   STAGE 4 — FOCUS TIMER
+---------------------------------------------------------------- */
+
+/* The large MM:SS countdown display */
+.timer-display {
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 0.05em;
+  text-align: center;
+  line-height: 1;
+  margin-bottom: var(--spacing-sm);
+  transition: color var(--transition);
+}
+
+/* When time is up, flash the display red */
+.timer-display.times-up {
+  color: #ef4444;
+}
+
+/* Status text below the clock */
+.timer-status {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Row of three control buttons */
+.timer-controls {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+/* Stop button */
+.btn-timer-stop {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.btn-timer-stop:hover {
+  background-color: #fde68a;
+}
+
+/* Reset button */
+.btn-timer-reset {
+  background-color: #f3f4f6;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.btn-timer-reset:hover {
+  background-color: var(--color-border);
+}
+
+/* Custom duration row (Stage 8) */
+.timer-custom {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.timer-custom label {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.timer-minutes-input {
+  width: 70px;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.875rem;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  text-align: center;
+  outline: none;
+  transition: border-color var(--transition), background-color var(--transition);
+}
+
+.timer-minutes-input:focus {
+  border-color: var(--color-primary);
+}
+
+
+/* ----------------------------------------------------------------
+   STAGE 5 — QUICK LINKS
+---------------------------------------------------------------- */
+
+/* Input group: stacks the two inputs and button */
+.links-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Shared style for both text inputs */
+.links-input {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: border-color var(--transition), background-color var(--transition);
+  outline: none;
+}
+
+.links-input:focus {
+  border-color: var(--color-primary);
+}
+
+/* The Add button spans full width in the column layout */
+.links-input-group .btn-primary {
+  align-self: flex-start;   /* don't stretch to full width */
+}
+
+/* Grid of link cards */
+.links-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+/* Each saved link is a small pill-style card */
+.link-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;          /* pill shape */
+  padding: 6px 12px;
+  transition: background-color var(--transition);
+}
+
+.link-item:hover {
+  background-color: var(--color-border);
+}
+
+/* The clickable link text */
+.link-anchor {
+  font-size: 0.875rem;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.link-anchor:hover {
+  text-decoration: underline;
+}
+
+/* Small × delete button inside each pill */
+.btn-link-delete {
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  padding: 0;
+  line-height: 1;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-link-delete:hover {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* Empty-state message */
+.links-empty {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  padding: var(--spacing-md) 0;
+}
+
+
+/* ----------------------------------------------------------------
+   STAGE 7 — CUSTOM NAME IN GREETING
+---------------------------------------------------------------- */
+
+/* Row that holds the greeting text and the edit pencil button */
+.greeting-message-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Remove bottom margin from the <p> since the row handles spacing */
+.greeting-message-row .greeting-message {
+  margin-bottom: 0;
+}
+
+/* The small pencil edit button */
+.btn-name-edit {
+  background: none;
+  font-size: 1rem;
+  padding: 2px 6px;
+  border-radius: 6px;
+  color: var(--color-text-muted);
+  opacity: 0.6;
+  transition: opacity var(--transition);
+}
+
+.btn-name-edit:hover {
+  opacity: 1;
+  background-color: var(--color-border);
+}
+
+/* The inline name-edit form row */
+.greeting-name-form {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+/* The name text input */
+.name-input {
+  flex: 1;
+  min-width: 140px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-primary);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  outline: none;
+  transition: background-color var(--transition);
+}
+
+/* Save button — reuses btn-primary, just sized down */
+.btn-name-save {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.875rem;
+}
+
+/* Cancel button */
+.btn-name-cancel {
+  background-color: var(--color-bg);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  font-size: 0.875rem;
+}
+
+.btn-name-cancel:hover {
+  background-color: var(--color-border);
+}
